@@ -7,7 +7,7 @@ function App() {
     <div className="App container-fluid">
       <div className="row">
         <div className="col bg-danger left-panel">
-          <FileSearch title="myDocument" onFileSearch={(value) => {console.log(value)}}></FileSearch>
+          <FileSearch title="my Document" onFileSearch={(value) => {console.log(value)}}></FileSearch>
         </div>
         <div className="col bg-primary right-pannel">
           <h1>this is the right</h1>
