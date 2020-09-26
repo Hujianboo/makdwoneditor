@@ -3,31 +3,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faEdit, faTrash,faTimes } from '@fortawesome/free-solid-svg-icons';
 import {faMarkdown} from '@fortawesome/free-brands-svg-icons'
 import PropTypes from 'prop-types';
+import useKeyPress from '../hooks/useKeyPress';
 const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
   const [ editStatus, setEditStatus ] = useState(false) //编辑状态
   const [ value, setValue ] = useState('')
-  const closeSearch = (event) => {   //关闭搜索操作
-      event.preventDefault();
+  const enterKey = useKeyPress(13);
+  const escKey = useKeyPress(27);
+
+  const closeSearch = () => {   //关闭搜索操作
       setEditStatus(false);
       setValue('');
   }
   useEffect(() => {
-    const handleInputEvent = (event) => {
-      const { keyCode } = event
-      if (keyCode === 13 && editStatus) {
-        const editItem = files.find(file => file.id === editStatus)
-        onSaveEdit(editItem.id, value)
-        setEditStatus(false)
-        setValue('')
-      } else if (keyCode === 27 && editStatus) {
-        closeSearch(event)
-      }
+    if (enterKey && editStatus) {
+      const editItem = files.find(file => file.id === editStatus)
+      onSaveEdit(editItem.id, value)
+      setEditStatus(false)
+      setValue('')
     }
-    document.addEventListener('keyup', handleInputEvent)
-    return () => {
-      document.removeEventListener('keyup', handleInputEvent)
+    if (escKey && editStatus) {
+      closeSearch()
     }
-  })
+  },[enterKey,editStatus,escKey])
   return(
     <ul className="list-group list-group-flush file-list">
       {
