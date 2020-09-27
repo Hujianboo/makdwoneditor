@@ -7,7 +7,11 @@ import FileSearch from './components/FileSearch';
 import FileList from './components/FileList';
 import TabList from './components/TabList';
 import defaultFiles from './utils/defaultFiles';
+import ReactMde from "react-mde";
 
+import "react-mde/lib/styles/css/react-mde-all.css";
+
+import "easymde/dist/easymde.min.css";
 function App() {
   return (
     <div className="App container-fluid px-0">
@@ -42,6 +46,11 @@ function App() {
             files={defaultFiles}
             unsaveIds={['1','3']}
             activeId={'2'}
+          />
+          <ReactMde
+            value={defaultFiles[1].body}
+            onChange={(value) => {console.log(value)}}
+            onTabChange={() => {}}
           />
         </div>
       </div>
