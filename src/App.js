@@ -38,7 +38,11 @@ function App() {
             </div>
         </div>
         <div className="col-8 right-pannel">
-          <TabList files={defaultFiles}></TabList>
+          <TabList
+            files={defaultFiles}
+            unsaveIds={['1','3']}
+            activeId={'2'}
+          />
         </div>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import { useState,useEffect} from 'react';
-import PropTypes from 'prop-types';
 
 const useKeyPress = (targetKeyCode) => {
   const [keyState, setkeyState] = useState(false);

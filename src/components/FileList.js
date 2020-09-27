@@ -1,4 +1,4 @@
-import React, { useState,useEffect, useRef} from 'react';
+import React, { useState,useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faEdit, faTrash,faTimes } from '@fortawesome/free-solid-svg-icons';
 import {faMarkdown} from '@fortawesome/free-brands-svg-icons'
@@ -26,11 +26,11 @@ const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
     }
   },[enterKey,editStatus,escKey])
   return(
-    <ul className="list-group list-group-flush file-list">
+    <ul className="list-group list-group-flush file-list ">
       {
         files.map(file => (
           <li
-          className="list-group-item bg-light row d-flex align-items-center file-item"
+          className="list-group-item bg-light row d-flex align-items-center file-item mx-0"
             key={file.id}
           >
             {
