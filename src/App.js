@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {faPlus, faFileImport} from '@fortawesome/free-solid-svg-icons';
 import BottomBtn from './components/BottomBtn';
 import './App.css';
@@ -13,13 +13,21 @@ import "react-mde/lib/styles/css/react-mde-all.css";
 
 import "easymde/dist/easymde.min.css";
 function App() {
+  const [files, setFiles] = useState(defaultFiles);
+  const [activeFileID, setActiveFileID] = useState('1');
+  const [openedFileIDs, setOpenedFileIDs] = useState([]);
+  const [unsavedFileIDs, setUnsavedFileIDs] = useState([]);
+  const openedFiles = openedFileIDs.map(openID => {
+    return files.find(file => file.id === openID)
+  });
+  const activeFile = files.find(file => file.id === activeFileID);
   return (
     <div className="App container-fluid px-0">
       <div className="row no-gutters">
         <div className="col-4 bg-light left-panel">
           <FileSearch  onFileSearch={(value) => {console.log(value)}}></FileSearch>
           <FileList 
-            files={defaultFiles}
+            files={files}
             onFileClick={(id) => {console.log(id)}}
             onFileDelete={(id) => {console.log(id)}}
             onSaveEdit={(id,newValue) => {console.log(id);console.log(newValue);}}
@@ -42,16 +50,24 @@ function App() {
             </div>
         </div>
         <div className="col-8 right-pannel">
-          <TabList
-            files={defaultFiles}
-            unsaveIds={['1','3']}
-            activeId={'2'}
-          />
-          <ReactMde
-            value={defaultFiles[1].body}
-            onChange={(value) => {console.log(value)}}
-            onTabChange={() => {}}
-          />
+          {
+            !activeFile &&
+            <div>空</div>
+          }{
+            activeFile && 
+          <>
+            <TabList
+              files={defaultFiles}
+              unsaveIds={['1','3']}
+              activeId={'2'}
+            />
+            <ReactMde
+              value={defaultFiles[1].body}
+              onChange={(value) => {console.log(value)}}
+              onTabChange={() => {}}
+            />
+          </>
+          }
         </div>
       </div>
     </div>
