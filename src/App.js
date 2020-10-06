@@ -7,20 +7,17 @@ import FileSearch from './components/FileSearch';
 import FileList from './components/FileList';
 import TabList from './components/TabList';
 import defaultFiles from './utils/defaultFiles';
-import ReactMde from "react-mde";
-
-import "react-mde/lib/styles/css/react-mde-all.css";
-
-import "easymde/dist/easymde.min.css";
+import CoreMde from './components/CoreMde';
 function App() {
   const [files, setFiles] = useState(defaultFiles);
   const [activeFileID, setActiveFileID] = useState('1');
-  const [openedFileIDs, setOpenedFileIDs] = useState([]);
-  const [unsavedFileIDs, setUnsavedFileIDs] = useState([]);
+  const [openedFileIDs, setOpenedFileIDs] = useState(['1','2','3']);
+  const [unsavedFileIDs, setUnsavedFileIDs] = useState(['2','3']);
   const openedFiles = openedFileIDs.map(openID => {
     return files.find(file => file.id === openID)
   });
   const activeFile = files.find(file => file.id === activeFileID);
+  console.log(files);
   return (
     <div className="App container-fluid px-0">
       <div className="row no-gutters">
@@ -32,7 +29,7 @@ function App() {
             onFileDelete={(id) => {console.log(id)}}
             onSaveEdit={(id,newValue) => {console.log(id);console.log(newValue);}}
             ></FileList>
-            <div className="row no-gutters">
+            <div className="row no-gutters button-group">
               <div className="col">
                 <BottomBtn
                   text="新建"
@@ -50,23 +47,24 @@ function App() {
             </div>
         </div>
         <div className="col-8 right-pannel">
-          {
-            !activeFile &&
-            <div>空</div>
-          }{
-            activeFile && 
-          <>
-            <TabList
-              files={defaultFiles}
-              unsaveIds={['1','3']}
-              activeId={'2'}
-            />
-            <ReactMde
-              value={defaultFiles[1].body}
-              onChange={(value) => {console.log(value)}}
-              onTabChange={() => {}}
-            />
-          </>
+          { !activeFile && 
+            <div className="start-page">
+              选择或者创建新的 Markdown 文档
+            </div>
+          }
+          { activeFile &&
+            <>
+              <TabList
+                files={openedFiles}
+                activeId={activeFileID}
+                unsaveIds={unsavedFileIDs}
+                onTabClick={(id) => {console.log(id)}}
+                onCloseTab={(id) => { console.log('closing', id)}}
+              />
+              <CoreMde 
+                value={activeFile && activeFile.body}
+              />
+            </>
           }
         </div>
       </div>

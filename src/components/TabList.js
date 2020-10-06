@@ -3,8 +3,11 @@ import classNames from 'classnames';
 import {faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './TabList.scss'
-const TabList = ({files,unsaveIds,activeId}) => {
 
+// files : 数组类型，总文件
+// unsaveIds : 数组类型，未保存文件的id
+// activeIds : 字符串类型 激活文件的id
+const TabList = ({files,unsaveIds,activeId}) => {
   return(
     <ul className="nav nav-tabs tablist-component">
       {
