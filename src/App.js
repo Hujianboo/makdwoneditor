@@ -8,6 +8,7 @@ import FileList from './components/FileList';
 import TabList from './components/TabList';
 import defaultFiles from './utils/defaultFiles';
 import CoreMde from './components/CoreMde';
+
 function App() {
   const [files, setFiles] = useState(defaultFiles);
   const [activeFileID, setActiveFileID] = useState('1');
@@ -16,8 +17,27 @@ function App() {
   const openedFiles = openedFileIDs.map(openID => {
     return files.find(file => file.id === openID)
   });
+  debugger
+  const tabClick = (fileID) => {
+    // set current active file
+    setActiveFileID(fileID)
+  }
+
+  const tabClose = (id) => {
+    //remove current id from openedFileIDs
+    const tabsWithout = openedFileIDs.filter(fileID => fileID !== id)
+    setOpenedFileIDs(tabsWithout)
+    // set the active to the first opened tab if still tabs left
+    debugger
+    if (tabsWithout.length > 0) {
+      setActiveFileID(tabsWithout[0])
+      debugger
+    } else {
+      setActiveFileID('')
+    }
+  }
   const activeFile = files.find(file => file.id === activeFileID);
-  console.log(files);
+  debugger
   return (
     <div className="App container-fluid px-0">
       <div className="row no-gutters">
@@ -58,8 +78,8 @@ function App() {
                 files={openedFiles}
                 activeId={activeFileID}
                 unsaveIds={unsavedFileIDs}
-                onTabClick={(id) => {console.log(id)}}
-                onCloseTab={(id) => { console.log('closing', id)}}
+                onTabClick={tabClick}
+                onCloseTab={tabClose}
               />
               <CoreMde 
                 value={activeFile && activeFile.body}

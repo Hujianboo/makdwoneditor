@@ -2,19 +2,19 @@ const defaultFiles = [
   {
     id: '1',
     title: 'first post',
-    body: 'should be aware of this',
+    body: '## 1',
     createdAt: 1563762965704
   },
   {
     id: '2',
     title: 'second post',
-    body: '## this is the title',
+    body: '## 2',
     createdAt: 1563762965704
   },
   {
     id: '3',
     title: '第三篇文档',
-    body: '## this is the title',
+    body: '## 3',
     createdAt: 1563762965704
   }
 ]

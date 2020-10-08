@@ -4,10 +4,21 @@ import {faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './TabList.scss'
 
+
 // files : 数组类型，总文件
 // unsaveIds : 数组类型，未保存文件的id
 // activeIds : 字符串类型 激活文件的id
-const TabList = ({files,unsaveIds,activeId}) => {
+/**
+ * @description: 
+ * @param {Array} files
+ * @param {Array} unsaveIds
+ * @param {String} activeId
+ * @param {Function} onTabClick
+ * @param {Function} onCloseTab
+ * 
+ * @return {type} 
+ */
+const TabList = ({files,unsaveIds,activeId,onTabClick,onCloseTab}) => {
   return(
     <ul className="nav nav-tabs tablist-component">
       {
@@ -22,12 +33,15 @@ const TabList = ({files,unsaveIds,activeId}) => {
             <li className="nav-item" key={file.id}>
               <a 
                 href="#"
-                className={className}>
+                className={className}
+                onClick={(e) => {e.preventDefault();onTabClick(file.id)}}
+                >
                 <span>
                   {file.title}
                 </span>
                 <span
                   className="ml-2 close-icon"
+                  onClick={(e) => {e.stopPropagation();onCloseTab(file.id)}}
                 >
                   <FontAwesomeIcon
                     icon={faTimes}

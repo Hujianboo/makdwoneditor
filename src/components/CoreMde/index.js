@@ -1,5 +1,5 @@
 import ReactMde from "react-mde";
-import React, { useState} from 'react';
+import React, { useState,useEffect} from 'react';
 import * as Showdown from "showdown";
 import "react-mde/lib/styles/css/react-mde-all.css";
 
@@ -11,8 +11,14 @@ const converter = new Showdown.Converter({
 });
 
 const CoreMde = ({value}) => {
+  
   const [valueText, setValueText] = useState(value)
   const [selectedTab, setSelectedTab] = React.useState("write");
+
+  useEffect(() => {
+    setValueText(value);
+  }, [value]);
+
   return(
     <>
       <ReactMde
