@@ -26,6 +26,7 @@ const CoreMde = ({value}) => {
         onChange={setValueText}
         selectedTab={selectedTab}
         onTabChange={setSelectedTab}
+        minEditorHeight={500}
         generateMarkdownPreview={markdown =>
           Promise.resolve(converter.makeHtml(markdown))
         }

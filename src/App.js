@@ -11,12 +11,20 @@ import CoreMde from './components/CoreMde';
 
 function App() {
   const [files, setFiles] = useState(defaultFiles);
+  const [searchedFiles,setSearchedFiles] = useState([]);
   const [activeFileID, setActiveFileID] = useState('1');
   const [openedFileIDs, setOpenedFileIDs] = useState(['1','2','3']);
   const [unsavedFileIDs, setUnsavedFileIDs] = useState(['2','3']);
   const openedFiles = openedFileIDs.map(openID => {
     return files.find(file => file.id === openID)
   });
+  const filesArr = searchedFiles.length > 0 ? searchedFiles : files;
+
+  const fileSearch = (keyword) => {
+    const newFiles = files.filter(file => file.title.includes(keyword))
+    setSearchedFiles(newFiles)
+  }
+
   const fileClick = (fileID) => {
     setActiveFileID(fileID);
     if(!openedFileIDs.includes(fileID)){
@@ -36,17 +44,31 @@ function App() {
       setActiveFileID('')
     }
   }
+  const fileDelete = (id) => {
+    const newFiles = files.filter((file) => file.id !== id);
+    setFiles(newFiles);
+    tabClose(id);
+  }
+  const updateFileName = (id,value) => {
+    const newFiles = files.map((file) => {
+      if(file.id === id){
+        file.title = value
+      };
+      return file;
+    })
+    setFiles(newFiles);
+  }
   const activeFile = files.find(file => file.id === activeFileID);
   return (
     <div className="App container-fluid px-0">
       <div className="row no-gutters">
         <div className="col-4 bg-light left-panel">
-          <FileSearch  onFileSearch={(value) => {console.log(value)}}></FileSearch>
+          <FileSearch  onFileSearch={fileSearch}></FileSearch>
           <FileList 
-            files={files}
+            files={filesArr}
             onFileClick={fileClick}
-            onFileDelete={(id) => {console.log(id)}}
-            onSaveEdit={(id,newValue) => {console.log(id);console.log(newValue);}}
+            onFileDelete={fileDelete}
+            onSaveEdit={updateFileName}
             ></FileList>
             <div className="row no-gutters button-group">
               <div className="col">
