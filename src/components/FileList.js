@@ -42,7 +42,7 @@ const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
                     icon={faMarkdown} 
                   />
                 </span>
-                <span className="col-8 c-link">{file.title}</span>
+                <span className="col-8 c-link" onClick={() => {onFileClick(file.id)}}>{file.title}</span>
                 <button
                   type="button"
                   className="icon-button col-1"
