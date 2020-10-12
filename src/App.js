@@ -8,6 +8,7 @@ import FileList from './components/FileList';
 import TabList from './components/TabList';
 import defaultFiles from './utils/defaultFiles';
 import CoreMde from './components/CoreMde';
+import uuidv4 from 'uuid/v4'
 
 function App() {
   const [files, setFiles] = useState(defaultFiles);
@@ -19,6 +20,22 @@ function App() {
     return files.find(file => file.id === openID)
   });
   const filesArr = searchedFiles.length > 0 ? searchedFiles : files;
+  const activeFile = files.find(file => file.id === activeFileID);
+
+  const createNewFile = () => {
+    const newID = uuidv4()
+    const newFiles = [
+      ...files,
+      {
+        id: newID,
+        title: '',
+        body: '## 请输出 Markdown',
+        createdAt: new Date().getTime(),
+        isNew: true,
+      }
+    ]
+    setFiles(newFiles)
+  }
 
   const fileSearch = (keyword) => {
     const newFiles = files.filter(file => file.title.includes(keyword))
@@ -58,7 +75,6 @@ function App() {
     })
     setFiles(newFiles);
   }
-  const activeFile = files.find(file => file.id === activeFileID);
   return (
     <div className="App container-fluid px-0">
       <div className="row no-gutters">
@@ -76,6 +92,7 @@ function App() {
                   text="新建"
                   colorClass="btn-primary"
                   icon={faPlus}
+                  onBtnClick={createNewFile}
                 ></BottomBtn>
               </div>
               <div className="col">

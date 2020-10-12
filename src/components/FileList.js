@@ -1,4 +1,4 @@
-import React, { useState,useEffect} from 'react';
+import React, { useState,useEffect,useRef} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faEdit, faTrash,faTimes } from '@fortawesome/free-solid-svg-icons';
 import {faMarkdown} from '@fortawesome/free-brands-svg-icons'
@@ -9,6 +9,7 @@ const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
   const [ value, setValue ] = useState('')
   const enterKey = useKeyPress(13);
   const escKey = useKeyPress(27);
+  const node = useRef(null);
 
   const closeSearch = () => {   //关闭搜索操作
       setEditStatus(false);
@@ -73,6 +74,7 @@ const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
                 <input
                 className="form-control col-10"
                 value={value}
+                ref={node}
                 onChange={(event) => { setValue(event.target.value)}}
                 />
                 <button
