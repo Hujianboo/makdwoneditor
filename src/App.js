@@ -13,9 +13,9 @@ import uuidv4 from 'uuid/v4'
 function App() {
   const [files, setFiles] = useState(defaultFiles);
   const [searchedFiles,setSearchedFiles] = useState([]);
-  const [activeFileID, setActiveFileID] = useState('1');
-  const [openedFileIDs, setOpenedFileIDs] = useState(['1','2','3']);
-  const [unsavedFileIDs, setUnsavedFileIDs] = useState(['2','3']);
+  const [activeFileID, setActiveFileID] = useState('');
+  const [openedFileIDs, setOpenedFileIDs] = useState([]);
+  const [unsavedFileIDs, setUnsavedFileIDs] = useState([]);
   const openedFiles = openedFileIDs.map(openID => {
     return files.find(file => file.id === openID)
   });
@@ -43,7 +43,9 @@ function App() {
   }
 
   const fileClick = (fileID) => {
+    //设置当前active ID
     setActiveFileID(fileID);
+    //将当前active ID放入openedFileID中（如果已经存在了，就不加入，做一个判断） 
     if(!openedFileIDs.includes(fileID)){
       setOpenedFileIDs([...openedFileIDs,fileID])
     }
@@ -59,6 +61,18 @@ function App() {
       setActiveFileID(tabsWithout[0])
     } else {
       setActiveFileID('')
+    }
+  }
+  const fileChange = (id,value) => {
+    const newFiles = files.map((file) => {
+      if(file.id === id){
+        file.body = value;
+      };
+      return file;
+    })
+    setFiles(newFiles)
+    if(!unsavedFileIDs.includes(id)){
+      setUnsavedFileIDs([...unsavedFileIDs, id])
     }
   }
   const fileDelete = (id) => {
@@ -78,6 +92,7 @@ function App() {
   return (
     <div className="App container-fluid px-0">
       <div className="row no-gutters">
+        {/* 左侧边栏 */}
         <div className="col-4 bg-light left-panel">
           <FileSearch  onFileSearch={fileSearch}></FileSearch>
           <FileList 
@@ -104,6 +119,7 @@ function App() {
               </div>
             </div>
         </div>
+        {/* 右侧展示栏  */}
         <div className="col-8 right-pannel">
           { !activeFile && 
             <div className="start-page">
@@ -121,6 +137,7 @@ function App() {
               />
               <CoreMde 
                 value={activeFile && activeFile.body}
+                onFileChange={(value) => {fileChange(activeFile.id,value)}}
               />
             </>
           }

@@ -6,24 +6,26 @@ import PropTypes from 'prop-types';
 import useKeyPress from '../hooks/useKeyPress';
 const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
   const [ editStatus, setEditStatus ] = useState(false) //编辑状态
-  const [ value, setValue ] = useState('')
+  const [ value, setValue ] = useState('') //input内部的value
   const enterKey = useKeyPress(13);
   const escKey = useKeyPress(27);
   const node = useRef(null);
 
-  const closeSearch = () => {   //关闭搜索操作
-      setEditStatus(false);
-      setValue('');
+  const closeInput = () => {   //关闭搜索操作
+    const item = files.find(file => file.id === editStatus);
+    item.isNew = false;
+    setEditStatus(false);
+    setValue('');
   }
   useEffect(() => {
-    if (enterKey && editStatus) {
+    if (enterKey && editStatus) { //编辑状态下，点击Enter保存当前input的值,然后不关闭框。
       const editItem = files.find(file => file.id === editStatus)
       onSaveEdit(editItem.id, value)
-      setEditStatus(false)
-      setValue('')
+      debugger
+      closeInput()
     }
-    if (escKey && editStatus) {
-      closeSearch()
+    if (escKey && editStatus) { //编辑状态下，点击Esc关闭当前的对话框。
+      closeInput()
     }
   },[enterKey,editStatus,escKey])
   return(
@@ -35,7 +37,7 @@ const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
             key={file.id}
           >
             {
-              (file.id !== editStatus) && 
+              (file.id !== editStatus && file.isNew !== true) && 
               <>
                 <span className="col-2">
                   <FontAwesomeIcon
@@ -80,7 +82,7 @@ const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
                 <button
                   type="button"
                   className="icon-button col-2"
-                  onClick={closeSearch}
+                  onClick={closeInput}
                 >
                   <FontAwesomeIcon
                     title="关闭"
