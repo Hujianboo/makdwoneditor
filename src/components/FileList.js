@@ -23,7 +23,9 @@ const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
     if (enterKey && editStatus && value.trim() !== '') { //编辑状态下，点击Enter保存当前input的值,然后不关闭框。
       const editItem = files.find(file => file.id === editStatus)
       onSaveEdit(editItem.id, value)
-      closeInput()
+      setEditStatus(false)
+      setValue('');
+      
     }
     if (escKey && editStatus) { //编辑状态下，点击Esc关闭当前的对话框。
       closeInput()

@@ -9,36 +9,35 @@ import TabList from './components/TabList';
 import defaultFiles from './utils/defaultFiles';
 import CoreMde from './components/CoreMde';
 import uuidv4 from 'uuid/v4'
-
+import {flattenArr,objToArr} from './utils/helper'
 function App() {
-  const [files, setFiles] = useState(defaultFiles);
+  const [files, setFiles] = useState(flattenArr(defaultFiles));
   const [searchedFiles,setSearchedFiles] = useState([]);
   const [activeFileID, setActiveFileID] = useState('');
   const [openedFileIDs, setOpenedFileIDs] = useState([]);
   const [unsavedFileIDs, setUnsavedFileIDs] = useState([]);
+  const filesArr = objToArr(files);
   const openedFiles = openedFileIDs.map(openID => {
-    return files.find(file => file.id === openID)
+    return files[openID]
   });
-  const filesArr = searchedFiles.length > 0 ? searchedFiles : files;
-  const activeFile = files.find(file => file.id === activeFileID);
+  const filesList = searchedFiles.length > 0 ? searchedFiles : filesArr;
+  const activeFile = files[activeFileID];
 
   const createNewFile = () => {
     const newID = uuidv4()
-    const newFiles = [
-      ...files,
-      {
-        id: newID,
-        title: '',
-        body: '## 请输出 Markdown',
-        createdAt: new Date().getTime(),
-        isNew: true,
-      }
-    ]
-    setFiles(newFiles)
+    const newFile =
+    {
+      id: newID,
+      title: '',
+      body: '## 请输出 Markdown',
+      createdAt: new Date().getTime(),
+      isNew: true, 
+    }
+    setFiles({...files,[newID]:newFile})
   }
 
   const fileSearch = (keyword) => {
-    const newFiles = files.filter(file => file.title.includes(keyword))
+    const newFiles = filesArr.filter(file => file.title.includes(keyword))
     setSearchedFiles(newFiles)
   }
 
@@ -76,19 +75,14 @@ function App() {
     }
   }
   const fileDelete = (id) => {
-    const newFiles = files.filter((file) => file.id !== id);
-    setFiles(newFiles);
-    // tabClose(id);
+    delete files[id]
+    setFiles(files);
+    tabClose(id);
   }
   const updateFileName = (id,value) => {
-    const newFiles = files.map((file) => {
-      if(file.id === id){
-        file.title = value
-        file.isNew = false
-      };
-      return file;
-    })
-    setFiles(newFiles);
+    const modifiedFile = {...files[id],title:value,isNew:false}
+    setFiles({...files,[id]: modifiedFile});
+    debugger
   }
   return (
     <div className="App container-fluid px-0">
@@ -97,7 +91,7 @@ function App() {
         <div className="col-4 bg-light left-panel">
           <FileSearch  onFileSearch={fileSearch}></FileSearch>
           <FileList 
-            files={filesArr}
+            files={filesList}
             onFileClick={fileClick}
             onFileDelete={fileDelete}
             onSaveEdit={updateFileName}
