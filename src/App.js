@@ -78,12 +78,13 @@ function App() {
   const fileDelete = (id) => {
     const newFiles = files.filter((file) => file.id !== id);
     setFiles(newFiles);
-    tabClose(id);
+    // tabClose(id);
   }
   const updateFileName = (id,value) => {
     const newFiles = files.map((file) => {
       if(file.id === id){
         file.title = value
+        file.isNew = false
       };
       return file;
     })

@@ -13,21 +13,34 @@ const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
 
   const closeInput = () => {   //关闭搜索操作
     const item = files.find(file => file.id === editStatus);
-    item.isNew = false;
     setEditStatus(false);
     setValue('');
+    if(item.isNew){
+      onFileDelete(item.id);
+    }
   }
   useEffect(() => {
-    if (enterKey && editStatus) { //编辑状态下，点击Enter保存当前input的值,然后不关闭框。
+    if (enterKey && editStatus && value.trim() !== '') { //编辑状态下，点击Enter保存当前input的值,然后不关闭框。
       const editItem = files.find(file => file.id === editStatus)
       onSaveEdit(editItem.id, value)
-      debugger
       closeInput()
     }
     if (escKey && editStatus) { //编辑状态下，点击Esc关闭当前的对话框。
       closeInput()
     }
   },[enterKey,editStatus,escKey])
+  useEffect(() => {
+    const newFile = files.find(file => file.isNew);
+    if(newFile){
+      setEditStatus(newFile.id);
+      setValue(newFile.title);
+    }
+  },[files]);
+  useEffect(() => {
+    if(editStatus){
+      node.current.focus();
+    }
+  }, [editStatus]);
   return(
     <ul className="list-group list-group-flush file-list ">
       {
@@ -71,12 +84,13 @@ const FileList = ({files, onFileClick, onSaveEdit, onFileDelete}) => {
               </>
             }
             {
-              (file.id === editStatus) &&
+              (file.id === editStatus || file.isNew === true) &&
               <>
                 <input
                 className="form-control col-10"
                 value={value}
                 ref={node}
+                placeholder="请输入文件名称"
                 onChange={(event) => { setValue(event.target.value)}}
                 />
                 <button
