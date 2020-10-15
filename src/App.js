@@ -88,7 +88,7 @@ function App() {
     <div className="App container-fluid px-0">
       <div className="row no-gutters">
         {/* 左侧边栏 */}
-        <div className="col-4 bg-light left-panel">
+        <div className="col-3 bg-light left-panel">
           <FileSearch  onFileSearch={fileSearch}></FileSearch>
           <FileList 
             files={filesList}
@@ -115,7 +115,7 @@ function App() {
             </div>
         </div>
         {/* 右侧展示栏  */}
-        <div className="col-8 right-pannel">
+        <div className="col-9 right-pannel">
           { !activeFile && 
             <div className="start-page">
               选择或者创建新的 Markdown 文档
